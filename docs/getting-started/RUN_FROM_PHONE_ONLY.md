@@ -9,7 +9,7 @@ Plenty for regular use. GitHub asks for a card only if you go beyond it.
 
 > ⚠️ These steps turn OFF the password. Anyone with your link can use your AI
 > providers and spend your quota. Don't post the link publicly, and stop the
-> Codespace when you're done (Step 6).
+> Codespace when you're done (Step 5).
 
 ---
 
@@ -21,33 +21,49 @@ Plenty for regular use. GitHub asks for a card only if you go beyond it.
 
 ---
 
-## Step 1 — Open the repo on your phone
-
-In your phone browser go to:
+## Step 1 — Tap this link on your phone
 
 ```
-https://github.com/imishbahu-commits/OmniRoute
+https://codespaces.new/imishbahu-commits/OmniRoute/tree/arena/019fa156-omniroute
 ```
 
-Sign in to GitHub if it asks.
+Sign in to GitHub if it asks, then tap the green **Create codespace** button on
+the page that appears.
 
-## Step 2 — Create the Codespace
+> ⚠️ **The branch matters.** The setup files live on the `arena/019fa156-omniroute`
+> branch, not on the repo's default branch. The link above already points at the
+> right one. If you create a codespace from the default branch instead, none of
+> the automatic setup exists and nothing in this guide will work.
 
-1. Tap the green **`< > Code`** button near the top.
-2. Tap the **Codespaces** tab (next to "Local").
-3. Tap **Create codespace on main**.
+<details>
+<summary>Doing it manually instead of using the link</summary>
+
+1. Go to `https://github.com/imishbahu-commits/OmniRoute`
+2. Tap the **branch button** (it says `release/v3.8.49`) and pick
+   **`arena/019fa156-omniroute`**
+3. Tap green **`< > Code`** → **Codespaces** tab → **Create codespace on
+   arena/019fa156-omniroute**
+
+Check the branch name says `arena/019fa156-omniroute` before you tap create.
+
+</details>
 
 > 💡 **Tip:** rotate your phone to landscape. The editor is cramped in portrait.
 
 A code editor now opens **in your phone's browser**. This is your cloud computer.
 
-## Step 3 — Wait for it to set itself up
+## Step 2 — Wait for it to set itself up
 
 This repo is pre-configured, so setup runs on its own. You'll see it install
 packages and start OmniRoute in a terminal panel at the bottom.
 
-**The first time takes about 5–10 minutes.** Leave the tab open. Don't lock your
-phone — some phones pause background tabs. If it goes quiet, tap the screen.
+**The first time takes about 10–15 minutes**, in two stages:
+
+1. _"Setting up your codespace"_ — installs ~2300 packages (5–8 min)
+2. Then OmniRoute starts and compiles the dashboard (3–5 min)
+
+Leave the tab open. Don't lock your phone — some phones pause background tabs.
+If it goes quiet, tap the screen.
 
 When it's ready you'll see, in the terminal:
 
@@ -61,7 +77,7 @@ When it's ready you'll see, in the terminal:
   Dashboard : https://<your-name>-20128.app.github.dev/dashboard
 ```
 
-## Step 4 — Open your link
+## Step 3 — Open your link
 
 **Tap and hold** the `Dashboard` link in the terminal to copy it, then paste it
 into a new browser tab. Or use the **Ports** tab (see below) and tap the globe 🌐.
@@ -72,7 +88,7 @@ like a real app:
 - **Safari** → Share → _Add to Home Screen_
 - **Chrome** → ⋮ → _Add to Home screen_
 
-## Step 5 — If the automatic setup didn't finish
+## Step 4 — If the automatic setup didn't finish
 
 Open the terminal panel in the editor (☰ menu → **Terminal** → **New Terminal**)
 and type:
@@ -83,7 +99,7 @@ bash .devcontainer/start-public.sh
 
 That re-runs everything and prints the link again. It's safe to run repeatedly.
 
-## Step 6 — Stopping it (do this when you're done!)
+## Step 5 — Stopping it (do this when you're done!)
 
 The Codespace keeps burning your free hours while it runs.
 
@@ -116,15 +132,16 @@ To stop strangers reaching the URL at all, set the port back to private:
 
 ## Troubleshooting
 
-| What you see                         | What to do                                                                                           |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------------- |
-| Link shows a GitHub sign-in page     | The port is still private. Terminal: `gh codespace ports visibility 20128:public -c $CODESPACE_NAME` |
-| "502 Bad Gateway" or blank page      | Still compiling. Wait 2 minutes, then reload.                                                        |
-| Terminal panel is missing            | ☰ menu → **Terminal** → **New Terminal**                                                            |
-| Setup seems stuck                    | `bash .devcontainer/start-public.sh`                                                                 |
-| Dashboard asks for a password        | `npm run public:open`                                                                                |
-| Want to see what went wrong          | `tail -50 /tmp/omniroute.log`                                                                        |
-| Codespace won't start / out of hours | Check <https://github.com/settings/billing>                                                          |
+| What you see                                    | What to do                                                                                                |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| No terminal activity, no `.devcontainer` folder | **Wrong branch.** Delete the codespace and use the Step 1 link — it points at `arena/019fa156-omniroute`. |
+| Link shows a GitHub sign-in page                | The port is still private. Terminal: `gh codespace ports visibility 20128:public -c $CODESPACE_NAME`      |
+| "502 Bad Gateway" or blank page                 | Still compiling. Wait 2 minutes, then reload.                                                             |
+| Terminal panel is missing                       | ☰ menu → **Terminal** → **New Terminal**                                                                 |
+| Setup seems stuck                               | `bash .devcontainer/start-public.sh`                                                                      |
+| Dashboard asks for a password                   | `npm run public:open`                                                                                     |
+| Want to see what went wrong                     | `tail -50 /tmp/omniroute.log`                                                                             |
+| Codespace won't start / out of hours            | Check <https://github.com/settings/billing>                                                               |
 
 ### Typing on a phone keyboard
 

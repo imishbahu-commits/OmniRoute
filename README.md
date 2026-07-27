@@ -12,6 +12,17 @@
 
 <div align="center">
 
+### 📱 No computer? Run it from your phone
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/imishbahu-commits/OmniRoute/tree/arena/019fa156-omniroute)
+
+Tap the badge, wait ~10 min, get a link that opens in any phone browser.
+Step-by-step: **[RUN_FROM_PHONE_ONLY.md](./docs/getting-started/RUN_FROM_PHONE_ONLY.md)**
+
+</div>
+
+<div align="center">
+
 # 💰 ~1.53B Free Tokens / Month
 
 </div>

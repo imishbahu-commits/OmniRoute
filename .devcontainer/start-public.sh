@@ -15,7 +15,10 @@ if curl -sS -m 5 -o /dev/null "http://127.0.0.1:${PORT}/v1/models" 2>/dev/null; 
   bold "✓ OmniRoute is already running."
 else
   bold "▶ Starting OmniRoute (first boot compiles for a few minutes)..."
-  HOST=0.0.0.0 nohup npm run dev >"$LOG" 2>&1 &
+  # Call the dev runner directly rather than `npm run dev`: that script hardcodes
+  # --max-old-space-size=8192, which is the whole machine on a 2-core/8gb
+  # codespace and gets the process OOM-killed mid-compile. 5 GB leaves headroom.
+  HOST=0.0.0.0 nohup node --max-old-space-size=5120 scripts/dev/run-next.mjs dev >"$LOG" 2>&1 &
 fi
 
 # ── 2. Make the forwarded port public (Codespaces only) ─────────────────────
