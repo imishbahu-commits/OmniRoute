@@ -274,7 +274,17 @@ const nextConfig = {
     "process",
   ],
   transpilePackages: ["@omniroute/open-sse", "@lobehub/icons", "fumadocs-ui", "fumadocs-core"],
-  allowedDevOrigins: ["localhost", "127.0.0.1", "192.168.0.250"],
+  // Extra dev origins (tunnel hostnames) can be added without editing code via
+  // OMNIROUTE_ALLOWED_DEV_ORIGINS="*.trycloudflare.com,*.ngrok-free.app,..."
+  allowedDevOrigins: [
+    "localhost",
+    "127.0.0.1",
+    "192.168.0.250",
+    ...(process.env.OMNIROUTE_ALLOWED_DEV_ORIGINS || "")
+      .split(",")
+      .map((origin) => origin.trim())
+      .filter(Boolean),
+  ],
   typescript: {
     // TODO: Re-enable after fixing all sub-component useTranslations scope issues
     ignoreBuildErrors: true,
