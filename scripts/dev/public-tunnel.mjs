@@ -21,8 +21,26 @@
  * provider handshake — run this from a machine with normal internet egress.
  */
 
-import { spawn } from "node:child_process";
+import { spawn, execFileSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
 import process from "node:process";
+
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+
+/** Print a scannable QR for `url` by reusing the mobile-url renderer. */
+function printQr(url) {
+  try {
+    const out = execFileSync(
+      process.execPath,
+      [path.join(HERE, "mobile-url.mjs"), "--qr-only", "--url", url],
+      { encoding: "utf8" }
+    );
+    process.stdout.write(out);
+  } catch {
+    /* QR is a nicety — never fail the tunnel over it. */
+  }
+}
 
 function arg(name, fallback) {
   const i = process.argv.indexOf(`--${name}`);
@@ -39,6 +57,10 @@ function banner(url) {
   console.log(`      ${url}`);
   console.log(`      Dashboard : ${url}/dashboard`);
   console.log(`      API base  : ${url}/v1`);
+  console.log(`${line}`);
+  console.log(`${line}`);
+  console.log(`  📱  Scan with your phone camera to open it:`);
+  printQr(url);
   console.log(`${line}`);
   console.log(`  Add to .env so links/OAuth use the public origin:`);
   console.log(`      NEXT_PUBLIC_BASE_URL=${url}`);
