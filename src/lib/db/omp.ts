@@ -1,11 +1,28 @@
 import os from "os";
 import path from "path";
-import { createRequire } from "node:module";
 
-const _require = createRequire(import.meta.url);
-const Database = process.versions.bun
-  ? (_require("bun:sqlite").Database as typeof import("better-sqlite3"))
-  : (_require("better-sqlite3") as typeof import("better-sqlite3"));
+/**
+ * Lazy-loads the better-sqlite3 Database constructor.
+ * Returns null if the native module is unavailable (graceful fallback).
+ */
+let _DatabaseCtor: (new (...args: any[]) => any) | null = null;
+
+async function getDatabaseCtor(): Promise<(new (...args: any[]) => any) | null> {
+  if (_DatabaseCtor !== undefined) return _DatabaseCtor;
+
+  try {
+    if (process.versions.bun) {
+      const bunSqlite = await import("bun:sqlite");
+      _DatabaseCtor = bunSqlite.Database;
+    } else {
+      const mod = await import("better-sqlite3");
+      _DatabaseCtor = (mod.default ?? mod) as unknown as (new (...args: any[]) => any);
+    }
+  } catch {
+    _DatabaseCtor = null;
+  }
+  return _DatabaseCtor;
+}
 
 function databaseOptions(readonly = false) {
   return readonly ? { readonly: true } : { readwrite: true, create: true };
@@ -14,9 +31,13 @@ function databaseOptions(readonly = false) {
 const getOmpDir = () => path.join(os.homedir(), ".omp", "agent");
 const getOmpDbPath = () => path.join(getOmpDir(), "agent.db");
 
-export function getOmpCredentials(providerId: string) {
+export async function getOmpCredentials(providerId: string) {
   const dbPath = getOmpDbPath();
   try {
+    const Database = await getDatabaseCtor();
+    if (!Database) {
+      return { hasOmniRoute: false, baseUrl: null, apiKey: null };
+    }
     const db = new Database(dbPath, databaseOptions(true));
     const row = db
       .prepare(
@@ -35,8 +56,11 @@ export function getOmpCredentials(providerId: string) {
   }
 }
 
-export function saveOmpCredentials(providerId: string, apiKey: string, baseUrl: string) {
+export async function saveOmpCredentials(providerId: string, apiKey: string, baseUrl: string) {
   const dbPath = getOmpDbPath();
+  const Database = await getDatabaseCtor();
+  if (!Database) return;
+
   const db = new Database(dbPath, databaseOptions());
 
   db.prepare("DELETE FROM auth_credentials WHERE provider = ?").run(providerId);
@@ -53,8 +77,11 @@ export function saveOmpCredentials(providerId: string, apiKey: string, baseUrl: 
   db.close();
 }
 
-export function deleteOmpCredentials(providerId: string) {
+export async function deleteOmpCredentials(providerId: string) {
   const dbPath = getOmpDbPath();
+  const Database = await getDatabaseCtor();
+  if (!Database) return;
+
   const db = new Database(dbPath, databaseOptions());
   db.prepare("DELETE FROM auth_credentials WHERE provider = ?").run(providerId);
   db.close();
