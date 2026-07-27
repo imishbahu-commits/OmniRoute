@@ -94,6 +94,8 @@
     "build:native:tproxy": "cd src/mitm/tproxy/native && npx --yes node-gyp rebuild",
     "start": "node scripts/dev/run-next.mjs start",
     "mobile": "node scripts/dev/mobile-url.mjs",
+    "public:open": "node scripts/dev/setup-public-mode.mjs",
+    "public:lock": "node scripts/dev/setup-public-mode.mjs --lock",
     "public": "node scripts/dev/public-tunnel.mjs",
     "public:ngrok": "node scripts/dev/public-tunnel.mjs --provider ngrok",
     "public:cloudflare": "node scripts/dev/public-tunnel.mjs --provider cloudflare",
